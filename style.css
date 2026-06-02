@@ -119,6 +119,35 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+/* --- Tombol Saluran WhatsApp di Header (Aestetik) --- */
+.saluran-header-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: #e8f5e9; /* Hijau muda lembut senada tema web */
+    color: #25D366;      /* Warna hijau ikon WhatsApp */
+    font-size: 1.15rem;
+    border-radius: 50%;
+    text-decoration: none;
+    border: 1px solid rgba(37, 211, 102, 0.2);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efek transisi halus saat disentuh kursor di desktop */
+.saluran-header-btn:hover {
+    background: #25D366;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+}
+
+/* Efek membal responsif saat ditekan di HP */
+.saluran-header-btn:active {
+    transform: scale(0.92);
+}
+
 /* Rating Banner */
 .rating-banner {
     display: flex;
