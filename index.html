@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KazeRoblox - Top Up Robux</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Tambahan CSS khusus untuk mode Gift */
+        .badge.purple { background-color: #f3e8ff; color: #9333ea; border: 1px solid #d8b4fe; }
+        .icon-purple { color: #9333ea; font-size: 1.5rem; }
+        #warning-gift { border-left: 4px solid #9333ea; background: rgba(147, 51, 234, 0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <div class="back-btn"><i class="fas fa-arrow-left"></i></div>
+            <div class="header-title">
+                <img src="assets/logo.png" alt="Logo KazeRoblox" class="header-logo">
+                <h1>KazeRoblox</h1>
+            </div>
+            <div class="header-actions">
+                <div class="action-btn" onclick="openRiwayat()" title="Riwayat Pembelian">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="action-btn cart-btn-container" onclick="openKeranjang()" title="Keranjang">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-badge" class="cart-badge">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="rating-banner">
+            <div class="rating-item">
+                <i class="fas fa-bolt" style="color: #fbbf24;"></i> Proses Cepat
+            </div>
+            <div class="rating-item">
+                <i class="fas fa-shield-alt" style="color: #3b82f6;"></i> Terpercaya
+            </div>
+            <div class="rating-item click-btn" onclick="openCaraBeli()">
+                <i class="fas fa-info-circle"></i> Cara Beli
+            </div>
+        </div>
+
+        <div class="promo-banner-container">
+            <img src="assets/banner-promo.png" alt="Promo Spesial KazeRoblox" class="promo-banner" onerror="this.src='https://placehold.co/600x200/4CAF50/ffffff?text=Promo+Spesial+Laxerouse'">
+        </div>
+
+        <main class="content">
+            <section class="section">
+                <h2 class="section-title">Jenis Diinginkan</h2>
+                <div class="type-tabs">
+                    <div class="tab active" id="tab-pending" onclick="setMode('pending')">
+                        <span class="badge red">Sedang Flashsale!</span>
+                        <div class="tab-content">
+                            <div>
+                                <h3>Robux 5-7 Hari</h3>
+                                <p>Paling Hemat & Terlaris!</p>
+                            </div>
+                            <i class="fas fa-clock icon-green"></i>
+                        </div>
+                    </div>
+                    <div class="tab" id="tab-instant" onclick="setMode('instant')">
+                        <span class="badge blue">Garansi 100% Aman</span>
+                        <div class="tab-content">
+                            <div>
+                                <h3>Langsung Masuk</h3>
+                                <p>Syarat: Join Grup 14 Hari</p>
+                            </div>
+                            <i class="fas fa-bolt icon-blue"></i>
+                        </div>
+                    </div>
+                    <!-- Tambahan Tab Via Gift -->
+                    <div class="tab" id="tab-gift" onclick="setMode('gift')">
+                        <span class="badge purple">Max 5000 Robux</span>
+                        <div class="tab-content">
+                            <div>
+                                <h3>Via Gift</h3>
+                                <p>Rp 140 / 1 Robux</p>
+                            </div>
+                            <i class="fas fa-gift icon-purple"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="warning-instant" class="warning-box" style="display: none;">
+                    ⚠️ <b>Perhatian:</b> Untuk layanan Langsung Masuk, akun Roblox kamu WAJIB sudah bergabung di komunitas Laxerouse minimal 14 hari.
+                </div>
+                <!-- Tambahan Info Warning Via Gift -->
+                <div id="warning-gift" class="warning-box" style="display: none;">
+                    🎁 <b>Info Via Gift:</b> Harga adalah <b>Rp 140 per 1 Robux</b>. Batas maksimal pembelian untuk metode ini adalah <b>5000 Robux</b>.
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Detail User</h2>
+                <p class="section-subtitle">Masukkan Username Roblox yang ingin diisi. Transaksi 100% aman.</p>
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" placeholder="Masukkan Username Roblox" id="username" oninput="onUsernameInput()" autocomplete="off">
+                </div>
+                <div id="username-status"></div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Jumlah Robux</h2>
+                <div class="custom-input-box">
+                    <div class="input-row">
+                        <!-- Tambahkan limit max di input untuk UX tambahan -->
+                        <input type="number" id="custom-robux" placeholder="Masukkan Jumlah" oninput="calculateCustomPrice()" min="1">
+                        <span>Rbx</span>
+                    </div>
+                    <div class="price-row">
+                        <span id="custom-price">Rp 0</span>
+                    </div>
+                </div>
+
+                <div class="divider">
+                    <span>Atau pilih dari penawaran terbaik</span>
+                </div>
+
+                <div class="product-grid" id="product-grid"></div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Pembayaran</h2>
+                <div class="payment-methods">
+                    <div class="payment-card active">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" alt="QRIS" class="qris-logo">
+                        <p>Pembayaran via QRIS Saja</p>
+                        <i class="fas fa-check-circle check-icon"></i>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div class="bottom-bar">
+            <div class="total-info">
+                <span>Total Item Terpilih</span>
+                <h3 id="bottom-total-price">Rp 0</h3>
+            </div>
+            <div class="bottom-buttons">
+                <button class="cart-add-btn" onclick="tambahKeKeranjang()" title="Tambah Ke Keranjang">
+                    <i class="fas fa-cart-plus"></i>
+                </button>
+                <button class="buy-btn" onclick="beliSekarangDirect()">Beli Langsung</button>
+            </div>
+        </div>
+
+        <div id="modal-cara-beli" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeCaraBeli()">&times;</span>
+                <h2>🌱 Cara Beli Robux</h2>
+                <ol>
+                    <li>Masukkan <b>Username Roblox</b> kamu dengan benar di kolom yang disediakan.</li>
+                    <li>Pilih tipe Robux (<b>5-7 Hari</b>, <b>Langsung Masuk</b>, atau <b>Via Gift</b>).</li>
+                    <li>Ketik jumlah Robux atau pilih langsung dari kotak pilihan di bawahnya.</li>
+                    <li>Klik tombol <i class="fas fa-cart-plus"></i> untuk menampung di keranjang atau klik <b>Beli Langsung</b>.</li>
+                    <li>Scan QRIS, upload bukti transfer sah, lalu tekan konfirmasi untuk mengirim data ke Admin!</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="modal-keranjang" class="modal">
+            <div class="modal-content-dark">
+                <div class="modal-header-dark">
+                    <h3><i class="fas fa-shopping-cart" style="color: #4CAF50;"></i> Keranjang Kamu</h3>
+                    <span class="close-btn-dark" onclick="closeKeranjang()">&times;</span>
+                </div>
+                <div id="cart-items-list" class="modal-body-scrollable">
+                    </div>
+                <div class="cart-summary-box">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Total Bayar:</span>
+                        <strong id="cart-total-price" style="color: #2ea043; font-size: 1.15rem;">Rp 0</strong>
+                    </div>
+                    <button class="checkout-btn" onclick="checkoutDariKeranjang()">Checkout Semua (<span id="cart-total-items">0</span>)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-riwayat" class="modal">
+            <div class="modal-content-dark">
+                <div class="modal-header-dark">
+                    <h3><i class="fas fa-history" style="color: #4CAF50;"></i> Riwayat Transaksi</h3>
+                    <span class="close-btn-dark" onclick="closeRiwayat()">&times;</span>
+                </div>
+                <div id="riwayat-items-list" class="modal-body-scrollable">
+                    </div>
+            </div>
+        </div>
+
+        <div id="modal-qris" class="modal">
+            <div class="modal-content-dark" style="max-width: 380px;">
+                <div class="modal-header-dark">
+                    <h3 id="qris-modal-title">🧾 Ringkasan & Pembayaran</h3>
+                    <span class="close-btn-dark" onclick="closeQris()">&times;</span>
+                </div>
+
+                <div class="invoice-box">
+                    <div id="qris-details-container">
+                        </div>
+                    <div style="border-top: 1px solid #30363d; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                        <span style="font-weight: 700; font-size: 14px;">Total Tagihan</span>
+                        <span id="qris-total-price" style="color: #2ea043; font-weight: 700; font-size: 18px;">Rp 0</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div style="flex: 0 0 auto; text-align: center; margin: 0 auto;">
+                        <p style="color: #8b949e; font-size: 11px; margin-bottom: 6px;">Scan QRIS KazeRoblox</p>
+                        <div style="background:#fff; padding: 7px; border-radius: 8px; border: 2px solid #2ea043; display: inline-block;">
+                            <img src="assets/qris.png" alt="QRIS" style="width: 110px; height: 110px; display: block; border-radius: 4px; object-fit: cover;" onerror="this.src='https://placehold.co/150x150/ffffff/000000?text=QRIS+ADMIN'">
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; min-width: 140px;">
+                        <p style="color: #e6edf3; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                            <i class="fas fa-upload" style="color: #2ea043; margin-right: 4px;"></i>Bukti Transfer <span style="color: #f85149;">*</span>
+                        </p>
+                        <div id="bukti-upload-area" onclick="document.getElementById('bukti-input').click()" class="upload-dropzone">
+                            <i class="fas fa-image" style="font-size: 20px; color: #8b949e;"></i>
+                            <span style="color: #8b949e; font-size: 11px;">Pilih Gambar Bukti</span>
+                            <span style="color: #484f58; font-size: 10px;">Max 5MB</span>
+                        </div>
+                        <input type="file" id="bukti-input" accept="image/*" style="display: none;">
+
+                        <div id="bukti-preview" style="display: none; margin-top: 6px; position: relative;">
+                            <img id="bukti-preview-img" src="" alt="Bukti" style="width: 100%; border-radius: 8px; border: 1px solid #30363d; max-height: 100px; object-fit: cover;">
+                            <button onclick="hapusBukti()" title="Hapus" class="btn-remove-bukti">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="sudah-bayar-btn" onclick="konfirmasiWhatsApp()" class="pay-submit-btn">
+                    Sudah Membayar
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
