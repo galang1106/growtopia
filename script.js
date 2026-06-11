@@ -6,7 +6,8 @@ const RATES = {
 };
 
 const MIN_ROBUX = 100; // Batas Minimal Top Up
-const ROBLOX_GIFT_PROFILE = "https://www.roblox.com/share?code=908ad5f1a397a740a50e295f4e48d8c8&type=Profile&source=ProfileShare&stamp=1781197684070";
+// LINK PROFIL ROBLOX ADMIN TERBARU UNTUK VIA GIFT
+const ROBLOX_GIFT_PROFILE = "https://www.roblox.com/share?code=908ad5f1a397a740a50e295f4e48d8c8&type=Profile&source=ProfileShare&stamp=1781198347089";
 
 let currentMode = 'pending';
 let selectedRobux = 0;
@@ -217,7 +218,6 @@ function tambahKeKeranjang() {
         price: currentPrice
     };
 
-    // Sematkan link profile jika item yang dimasukkan ke keranjang bermetode via gift
     if (currentMode === 'gift') {
         item.profileLink = ROBLOX_GIFT_PROFILE;
     }
@@ -362,7 +362,6 @@ function beliSekarangDirect() {
         <div class="invoice-row-item"><span>Jumlah</span><span>${robuxAmount} Robux</span></div>
     `;
 
-    // Sisipkan penanda informasi profile link admin pada invoice modal jika memilih via gift
     if (currentMode === 'gift') {
         checkoutContext.data.profileLink = ROBLOX_GIFT_PROFILE;
         invoiceHtml += `
