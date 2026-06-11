@@ -1,31 +1,29 @@
-// Konfigurasi Harga
+// Konfigurasi Harga per 1 Robux
 const RATES = {
-    pending: 110, // 5-7 Hari -> 110 Rupiah per 1 Robux
-    instant: 130, // Langsung Masuk -> 130 Rupiah per 1 Robux
-    gift: 140     // Via Gift Robux -> 140 Rupiah per 1 Robux
+    pending: 110, 
+    instant: 130, 
+    gift: 140     
 };
 
-const MIN_ROBUX = 100; // Batas Minimal Top Up
-// LINK PROFIL ROBLOX ADMIN TERBARU UNTUK VIA GIFT
+const MIN_ROBUX = 100; 
+
+// LINK PROFIL AKUN ADMIN UNTUK VIA GIFT (BENAR & FINAL)
 const ROBLOX_GIFT_PROFILE = "https://www.roblox.com/share?code=908ad5f1a397a740a50e295f4e48d8c8&type=Profile&source=ProfileShare&stamp=1781198347089";
 
 let currentMode = 'pending';
 let selectedRobux = 0;
 let currentPrice = 0;
 
-/* --- LOGIKA STATE SELLER --- */
 let usernameCheckTimeout = null;
 let isUsernameValid = false;
 let verifiedUserId = null;
 let verifiedUsername = null;
 let buktiFile = null;
 
-// Keranjang & Riwayat Storage Setup
 let KazeCart = JSON.parse(localStorage.getItem('kazecart_data')) || [];
 let KazeHistory = JSON.parse(localStorage.getItem('kazehistory_data')) || [];
-let checkoutContext = { type: 'direct', data: null }; // 'direct' atau 'cart'
+let checkoutContext = { type: 'direct', data: null };
 
-// Array Paket Default (Semua di atas atau sama dengan 100 Robux)
 const packages = [
     100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 4000, 5000
 ];
@@ -34,7 +32,7 @@ function formatRupiah(angka) {
     return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-/* --- CEK USERNAME ROBLOX --- */
+/* --- CEK USERNAME ROBLOX VIA API --- */
 async function checkRobloxUsername(username) {
     const statusEl = document.getElementById('username-status');
     if (!username || username.trim() === '') {
@@ -98,7 +96,7 @@ function onUsernameInput() {
     usernameCheckTimeout = setTimeout(() => { checkRobloxUsername(val); }, 800);
 }
 
-/* --- SELECTION & CALCULATION CONTROLLERS --- */
+/* --- MODE TABS SELECTION --- */
 function setMode(mode) {
     currentMode = mode;
     document.getElementById('tab-pending').classList.remove('active');
@@ -176,7 +174,7 @@ function getActiveRobuxAmount() {
     return inputVal ? parseInt(inputVal) : 0;
 }
 
-/* --- FITUR: KERANJANG BELANJA (CART SYSTEM) --- */
+/* --- CART SYSTEM --- */
 function updateCartBadge() {
     const badge = document.getElementById('cart-badge');
     badge.innerText = KazeCart.length;
@@ -279,7 +277,7 @@ function hapusItemKeranjang(id) {
     renderCartList();
 }
 
-/* --- FITUR: RIWAYAT PEMBELIAN (HISTORY SYSTEM) --- */
+/* --- HISTORY TRANSAKSI --- */
 function openRiwayat() {
     renderRiwayatList();
     document.getElementById('modal-riwayat').style.display = 'flex';
@@ -313,7 +311,7 @@ function renderRiwayatList() {
             itemSummary = `- ${data.jumlahRobux} Rbx (${data.metode}) untuk ${data.username}${linkAppend}`;
         }
 
-        div.innerHTML = `
+                div.innerHTML = `
             <div class="riwayat-date">${data.waktu}</div>
             <div style="margin-bottom: 6px; font-weight: 600; color: #fff;">Invoice Belanja:</div>
             <div style="color: #c9d1d9; margin-bottom: 6px; line-height: 1.4; font-size: 12px;">${itemSummary}</div>
@@ -326,7 +324,7 @@ function renderRiwayatList() {
     });
 }
 
-/* --- LOGIKA CHECKOUT & TAMPILAN QRIS --- */
+/* --- CHECKOUT MANAGEMENT --- */
 function beliSekarangDirect() {
     const username = document.getElementById('username').value.trim();
     if (!username || !isUsernameValid) {
@@ -426,7 +424,7 @@ function hapusBukti() {
     document.getElementById('bukti-upload-area').style.display = 'flex';
 }
 
-/* --- KONFIRMASI PEMBAYARAN & DISCORD WEBHOOK REDIRECT --- */
+/* --- SEND WEBHOOK & WHATSAPP REDIRECT --- */
 async function konfirmasiWhatsApp() {
     if (!buktiFile) {
         alert('Mohon upload bukti foto transfer/scan yang sah terlebih dahulu!');
@@ -548,7 +546,7 @@ function fileToBase64(file) {
     });
 }
 
-/* --- EVENT LISTENERS INITIALIZATION --- */
+/* --- INITIALIZE COMPONENT LIFE-CYCLE --- */
 document.addEventListener('DOMContentLoaded', () => {
     renderGrid();
     updateCartBadge();
@@ -587,7 +585,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* --- POP-UP CLOSER HANDLING --- */
 function openCaraBeli() { document.getElementById('modal-cara-beli').style.display = 'flex'; }
 function closeCaraBeli() { document.getElementById('modal-cara-beli').style.display = 'none'; }
 
